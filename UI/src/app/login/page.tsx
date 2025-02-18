@@ -15,7 +15,7 @@ export default function Login() {
     
     try {
       await login(username, password);
-    } catch (err) {
+    } catch {
       setError('Invalid username or password');
     }
   };

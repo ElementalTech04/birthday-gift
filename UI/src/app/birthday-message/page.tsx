@@ -44,7 +44,7 @@ export default function BirthdayMessage() {
     };
 
     fetchMessage();
-  }, [language]);
+  }, [language, token]);
 
   if (!language) {
     return (
