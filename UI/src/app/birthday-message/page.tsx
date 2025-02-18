@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
-export default function BirthdayMessage() {
+function BirthdayMessageContent() {
   const searchParams = useSearchParams();
   const language = searchParams.get('language');
   const { token } = useAuth();
@@ -86,5 +86,13 @@ export default function BirthdayMessage() {
         <div className="text-2xl whitespace-pre-wrap">{message}</div>
       </div>
     </div>
+  );
+}
+
+export default function BirthdayMessage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="text-2xl">Loading...</div></div>}>
+      <BirthdayMessageContent />
+    </Suspense>
   );
 }
