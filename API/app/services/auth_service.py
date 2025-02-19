@@ -59,6 +59,11 @@ def authenticate_user(username: str, password: str) -> bool:
     """
     Validate username and password against configured credentials
     """
+    print(f"Stored username: {settings.api_username}")
+    print(f"Stored password: {settings.api_password}")
+    print(f"Provided username: {username}")
+    print(f"Provided password: {password}")
+    
     return (
         username == settings.api_username and 
         password == settings.api_password

@@ -1,30 +1,41 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine AS base
 
+# Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-# Install production dependencies
-RUN npm install --omit=dev
+# Install dependencies
+RUN npm ci
 
-# Copy the rest of the application including .env files
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application
+# Environment variables must be present at build time
+COPY .env* ./
+
+# Build Next.js
 RUN npm run build
 
-# Production image
-FROM node:18-alpine
+# Production image, copy all the files and run next
+FROM base AS runner
 WORKDIR /app
 
-# Copy necessary files from builder
+ENV NODE_ENV=production
+
+# Copy package files and install only production dependencies
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+# Copy built application
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.env* ./
 
-# Expose the port the app runs on
 EXPOSE 3000
 
-# Command to run the application
 CMD ["npm", "start"]
