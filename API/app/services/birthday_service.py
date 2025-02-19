@@ -11,6 +11,8 @@ async def get_birthday_message(language: str) -> dict:
     """
     Get birthday message for the specified language
     """
+    
+    print(f"Retrieving message for language: {language}")
     if language not in BIRTHDAY_MESSAGES:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
