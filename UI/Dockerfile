@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
+# Install production dependencies
 RUN npm install --omit=dev
 
 # Copy the rest of the application including .env files
@@ -19,9 +19,9 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy necessary files from builder
-COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.env* ./
 
 # Expose the port the app runs on
