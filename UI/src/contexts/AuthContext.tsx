@@ -34,6 +34,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       formData.append('username', username);
       formData.append('password', password);
 
+      console.log(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`);
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`, {
         method: 'POST',
         headers: {
